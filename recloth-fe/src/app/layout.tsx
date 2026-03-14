@@ -13,16 +13,12 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 export const metadata: Metadata = {
   title: { default: 'Recloth — Fashion Retail Premium', template: '%s | Recloth' },
   description: 'Marketplace thrifting fashion Indonesia. Jual beli pakaian prelove berkualitas.',
-  icons: [
-    { rel: 'icon', url: '/favicon.ico' },
-    { rel: 'apple-touch-icon', url: '/logo-recloth.png' },
-  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+    <html lang="id" suppressHydrationWarning className="overflow-x-hidden">
+      <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false} disableTransitionOnChange>
           <ReactQueryProvider>
             <div className="flex flex-col min-h-screen">

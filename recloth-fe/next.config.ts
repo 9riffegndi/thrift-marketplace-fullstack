@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "image.hm.com",
+      },
+      {
+        protocol: "https",
+        hostname: "fakestoreapi.com",
+      },
+      {
+        protocol: "https",
         hostname: "lp2.hm.com",
       },
       {

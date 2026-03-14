@@ -32,7 +32,7 @@ export function Navbar() {
       "sticky top-0 z-50 w-full transition-all duration-300 bg-white border-b border-zinc-200 h-20",
       isScrolled && "h-16 shadow-sm"
     )}>
-      <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto h-full px-2 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-8 overflow-hidden">
         
         {/* Left: Desktop Nav */}
         {/* <div className="hidden lg:flex items-center gap-8 flex-1">
@@ -51,8 +51,12 @@ export function Navbar() {
         </div> */}
 
         {/* Center: Logo */}
-        <Link href="/" className="flex items-center gap-3 group px-4">
-          <img src="/logo-recloth.png" alt="Recloth Logo" className="h-14 w-auto transition-transform group-hover:scale-105" />
+        <Link href="/" className="flex items-center gap-3 group px-4 shrink-0">
+          <img 
+            src="/logo-recloth.png" 
+            alt="Recloth Logo" 
+            className="h-10 sm:h-14 w-auto object-contain transition-transform group-hover:scale-105" 
+          />
           <span className="font-black text-2xl tracking-tighter uppercase hidden sm:block leading-none text-black">Recloth</span>
         </Link>
 

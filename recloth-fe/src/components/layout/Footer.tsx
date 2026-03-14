@@ -6,17 +6,19 @@ export function Footer() {
   return (
     <footer className="bg-background border-t border-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
-        <div className="flex flex-col md:flex-row justify-between gap-16">
+        <div className="flex  items-end flex-col md:flex-row justify-between gap-16">
           {/* Brand */}
-          <div className="space-y-6 flex-1">
-            <span className="font-bold text-2xl lowercase tracking-tighter">recloth</span>
-            <p className="text-[11px] text-zinc-500 leading-relaxed max-w-xs font-medium uppercase tracking-wide">
-              Misi kami adalah mendemokratisasi fashion retail berkelanjutan melalui sistem resale prelove berkualitas.
+          <div className="flex flex-col gap-6">
+            <Link href="/" className="inline-block">
+              <img src="/logo-recloth.png" alt="Recloth Logo" className="h-64 w-auto object-contain" />
+            </Link>
+            <p className="text-zinc-400 text-sm leading-relaxed max-w-xs">
+              Premium C2C Marketplace & Swap Platform. Cara baru berbelanja fashion berkelanjutan dengan gaya.
             </p>
           </div>
 
           {/* Links & Info */}
-          <div className="flex flex-wrap gap-12 md:gap-24 flex-[2]">
+          <div className="flex flex-wrap items-center gap-12 md:gap-24 flex-[2]">
             <div className="space-y-6">
               <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">Katalog</h4>
               <ul className="space-y-3">
