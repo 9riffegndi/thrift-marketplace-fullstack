@@ -1,38 +1,73 @@
-# Thrift Marketplace Fullstack (Recloth)
+# Recloth: Premium C2C Marketplace & Swap Platform
 
-A modern, high-performance C2C (Consumer-to-Consumer) Marketplace and Swap Platform for Premium Thrifting. This project features a clean, minimalist aesthetic inspired by H&M.
+Recloth is a high-performance, minimalist C2C marketplace designed for the premium thrifting community. Inspired by the clean aesthetics of H&M, it offers a seamless experience for buying, selling, and swapping (bartering) preloved fashion items.
 
-## Project Structure
-- **/recloth-fe**: Frontend built with Next.js 15, Tailwind CSS 4, and Zustand.
-- **/recloth-be**: Backend API built with Laravel 11, Sanctum, and Reverb (Websockets).
-- **api.yaml**: OpenAPI 3.0 Documentation for the system.
+## 🚀 Tech Stack
 
-## Main Features
-- **Premium Shop**: Curated 3-column responsive grid with infinite scroll pagination.
-- **Forgot Password**: Secure multi-step password recovery system (FE & BE).
-- **Real-time Chat**: Fully integrated chat system with delivery status indicators.
-- **Product Swap**: Unique barter system with state-managed request flow.
-- **Secure Payment**: Integrated with Midtrans for seamless transactions.
-- **Wallet System**: In-app balance, top-ups, and secure withdrawals.
-- **Seller Dashboard**: Comprehensive stats and inventory management.
+### Frontend
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: Tailwind CSS 4 (Custom minimalist theme)
+- **State Management**: Zustand & React Query (@tanstack/react-query)
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+- **Form Handling**: React Hook Form & Zod
+- **API Client**: Axios with interceptors
 
-## Rapid Setup
-The project includes automated scripts for quick initialization:
+### Backend
+- **Framework**: Laravel 11
+- **Auth**: Laravel Sanctum (SPA & API)
+- **Real-time**: Laravel Reverb (Websockets)
+- **Admin CMS**: Filament v3 (Super Admin Panel)
+- **Database**: MySQL / MariaDB
+- **Search**: Laravel Scout (Database engine)
+- **Storage**: Amazon S3 (compatible local storage)
+- **Payment Gateway**: Midtrans Integration
 
-1. **Install All**: Run `setup.bat` (Installs both FE and BE dependencies).
-2. **Start All**: Run `run-all.bat` (Starts API, Websockets, and Frontend).
-3. **Seed Data**: Run `php artisan migrate:fresh --seed` (Optional, as scripts handle this).
+## ✨ Key Features
 
-## Demo Accounts
-Use the following accounts to test the application (Default password: `password`):
-- **Admin Account**: `admin@recloth.id` (Filament CMS)
-- **Seller Account**: `penjual@recloth.id`
+### 🛍️ Premium Shopping Experience
+- **Responsive Grid**: 3-column layout (Desktop), 2-column (Tablet), 1-column (Mobile).
+- **Infinite Scroll**: Seamless "Load More" pagination for product discovery.
+- **Search & Filter**: Keyword search and category-based filtering.
+- **Product Detail**: Detailed condition badges, size info, and store linking.
+
+### 🔄 Unique Swap (Barter) System
+- **Request Flow**: Propose a swap for any product using your own items.
+- **Counter Offers**: Real-time negotiation for swaps.
+- **Escrow Guard**: Funds/items held securely until both parties confirm delivery.
+
+### 💬 Real-time Communication
+- **Messenger**: Instant chat between buyers and sellers.
+- **Status Indicators**: Read receipts, delivery status, and online presence.
+
+### 💳 Financial Ecosystem
+- **Wallet**: Check balance, view transaction history (Payment, Top-up, Withdrawal).
+- **Midtrans**: Checkout via QRIS, Virtual Accounts, and Bank Transfer.
+- **Admin CMS**: Manage users, products, categories, and withdrawals from a powerful backend.
+
+## 🛠️ Rapid Setup
+
+Initialize the entire stack with minimal effort:
+
+1. **Setup All**: Run `setup.bat` (Installs all FE/BE dependencies).
+2. **Launch Services**: Run `run-all.bat` (Starts Laravel, Reverb, and Next.js).
+3. **Database Reset**: Run `php artisan migrate:fresh --seed` (Creates fresh data with demo users).
+
+## 🔑 Demo Accounts
+
+Use these credentials to explore the platform (Password: `password`):
+
+- **Premium Account (Recommended)**: `penjual@recloth.id`
+  *Access to Seller Dashboard, Multi-item management, and standard buying features.*
 - **Buyer Account**: `pembeli@recloth.id`
+  *Standard browsing, checkout, and swap request experience.*
+- **Super Admin**: `admin@recloth.id`
+  *Access the control center at `http://localhost:8000/admin`.*
 
-## Environment Configuration
-Ensure you have the following environment variables configured:
-- **Backend (`recloth-be/.env`)**: DB credentials, Midtrans keys, and Reverb config.
-- **Frontend (`recloth-fe/.env.local`)**: `NEXT_PUBLIC_API_URL` and Pusher/Reverb keys.
+## 📂 Project Structure
+- `/recloth-fe`: Modern Next.js application.
+- `/recloth-be`: RESTful Laravel API.
+- `api.yaml`: Full API contract and documentation.
 
-## API Documentation
-Refer to [api.yaml](./api.yaml) for a detailed list of all endpoints, parameters, and authentication requirements.
+---
+Built with ❤️ for the Recloth Community.
