@@ -83,7 +83,7 @@ export default function HomePage() {
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-white border-b border-zinc-200">
              <div className="text-center space-y-6">
-                <h1 className="text-5xl md:text-8xl font-black text-black uppercase tracking-tighter leading-none">Premium Thrift.</h1>
+                <h1 className="text-5xl md:text-8xl font-black text-black uppercase tracking-tighter leading-none">Recloth.</h1>
                 <p className="text-[10px] text-zinc-400 uppercase tracking-[0.4em] font-black">Curated Second Hand Fashion</p>
                 <div className="pt-8">
                   <button 

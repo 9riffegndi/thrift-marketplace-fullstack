@@ -69,24 +69,39 @@ class RealisticIndoMarketplaceSeeder extends Seeder
             ]
         ];
 
-        $unsplashIds = [
+        $stableUrls = [
             'Atasan' => [
-                '3V8xo5Gbusk', 'elbKS4DY21g', '7rNmwV2dKwA', 'uXn4yP_2gR0', '25M6_cmjEIs', 
-                'm6wVEhf8W2M', '18i85V5uXhA', '0x9y1jW5x0c', 'T6a4h3qA88', 'w2V_V7k5zV0'
+                'https://lp2.hm.com/hmgoepprod?set=source[/01/0d/010d7a040b0797170881f215d862f1e62688b13c.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://lp2.hm.com/hmgoepprod?set=source[/6e/bc/6ebca6a7f53f9361ad22f03328e75e9f193d5f8a.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://lp2.hm.com/hmgoepprod?set=source[/3b/c3/3bc3b3921319c5c76c120c9f168fbc97cd645f09.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1591047116407-37a5223a7599?q=80&w=1000&auto=format&fit=crop',
             ],
             'Bawahan' => [
-                'zDyJOj8ZXG0', 'VBf7RPTezEc', 'RWLTHuxCqYo', '8ogoafT2s8o', 'Xy94_bPTm5s', 
-                'q_LqU8390bU', 'Qk4n4Jm0-hA', 'e616t17v50E', 'K_X18MvD_hS', 'aQ0Cz__AHET'
+                'https://lp2.hm.com/hmgoepprod?set=source[/1f/6d/1f6d34b4c107198d098e7987ca9991206f47f201.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://lp2.hm.com/hmgoepprod?set=source[/7f/0b/7f0b83e028b8b9cb030f0f375f928a7e0c406085.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://lp2.hm.com/hmgoepprod?set=source[/95/a0/95a07106eea410410800660a9991206f47f201.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1542272604-787a3e553584?q=80&w=1000&auto=format&fit=crop',
             ],
             'Jaket & Outer' => [
-                'sO3TXDcleTI', 'pSsOJ5pheII', 'tOPINlolvX4', 'yzFsvhltZj0', '1stfO72rayc', 
-                'TCvB_p-WMiU', '0Cz--AOHETw', 'g0BILldZuyI', 'Qk4n4Jm0-hA', 'Xk603x6k3cQ'
+                'https://lp2.hm.com/hmgoepprod?set=source[/2f/8c/2f8c5b9619a9a0e67b7e5f6e8976a44c9b9cb1a4.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://lp2.hm.com/hmgoepprod?set=source[/4a/a0/4aa068b5a1a1f0a1c6e6a1e1e1e1e1e1e1e1e1e1.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1520975954732-383b5c39c158?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1544022613-e87dc75a783a?q=80&w=1000&auto=format&fit=crop',
             ],
             'Sepatu & Sandal' => [
-                'P5yW6_nN06k', '4S8rVqXv22A', 'q_LqU8390bU', 'p4D51z8M87A', 'c5164B86-Yk', 
-                'x6b-VvY57zQ', 'z196l42m-1M', 'NO-nJu64o_Y', '164_6wVEhf8', '_99r8905p0'
+                'https://lp2.hm.com/hmgoepprod?set=source[/15/8e/158e235a9688df2cb6636ac5964893444053644f.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://lp2.hm.com/hmgoepprod?set=source[/d8/bf/d8bf84b8d5d4c8a5f8a07c3f7d1b8fa8d7a18f8c.jpg],origin[dam],category[],type[LOOKBOOK],res[z],hmver[1]&call=url[file:/product/main]',
+                'https://images.unsplash.com/photo-1542291008-57ac454403fa?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1460353081330-61928258325a?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1000&auto=format&fit=crop',
             ],
-            'Default' => ['elbKS4DY21g']
+            'Default' => [
+                'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1000&auto=format&fit=crop'
+            ]
         ];
 
         $categories = Category::all();
@@ -161,18 +176,15 @@ class RealisticIndoMarketplaceSeeder extends Seeder
                 ]);
 
                 // Add 1-2 photos
-                $photoKey = isset($unsplashIds[$lookupKey]) ? $lookupKey : 'Default';
-                $ids = $unsplashIds[$photoKey];
+                $photoKey = isset($stableUrls[$lookupKey]) ? $lookupKey : 'Default';
+                $urls = $stableUrls[$photoKey];
                 
-                for ($k = 0; $k < 1; $k++) {
-                    $uId = $ids[array_rand($ids)];
-                    ProductPhoto::create([
-                        'product_id' => $product->id,
-                        'photo_url'  => "https://images.unsplash.com/photo-{$uId}?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-                        'is_primary' => $k === 0,
-                        'sort_order' => $k,
-                    ]);
-                }
+                ProductPhoto::create([
+                    'product_id' => $product->id,
+                    'photo_url'  => $urls[array_rand($urls)],
+                    'is_primary' => true,
+                    'sort_order' => 0,
+                ]);
             }
         }
 

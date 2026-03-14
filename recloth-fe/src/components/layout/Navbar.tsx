@@ -52,9 +52,7 @@ export function Navbar() {
 
         {/* Center: Logo */}
         <Link href="/" className="flex items-center gap-3 group px-4">
-          <div className="h-9 w-9 bg-black flex items-center justify-center transition-transform group-hover:rotate-6">
-            <span className="text-white font-black text-xl italic leading-none">R</span>
-          </div>
+          <img src="/logo-recloth.png" alt="Recloth Logo" className="h-10 w-auto transition-transform group-hover:scale-105" />
           <span className="font-black text-2xl tracking-tighter uppercase hidden sm:block leading-none text-black">Recloth</span>
         </Link>
 

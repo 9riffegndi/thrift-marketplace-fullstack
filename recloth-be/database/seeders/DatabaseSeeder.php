@@ -12,8 +12,9 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
             CategorySeeder::class,
             SystemConfigSeeder::class,
-            UserSeeder::class,
-            ProductSeeder::class,
+            UserSeeder::class, // Keep core sample users
+            RealisticIndoMarketplaceSeeder::class,
+            // ProductSeeder::class, // Optional, can be disabled if realistic seeder is enough
             // OrderSeeder::class,
         ]);
     }

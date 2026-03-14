@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "lp2.hm.com",
+      },
+      {
+        protocol: "https",
+        hostname: "static.zara.net",
+      },
+      {
+        protocol: "https",
         hostname: "picsum.photos",
       },
       {
