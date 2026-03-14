@@ -21,6 +21,13 @@ The project includes automated scripts for quick initialization:
 
 1. **Install All**: Run `setup.bat` (Installs both FE and BE dependencies).
 2. **Start All**: Run `run-all.bat` (Starts API, Websockets, and Frontend).
+3. **Seed Data**: Run `php artisan migrate:fresh --seed` (Optional, as scripts handle this).
+
+## Demo Accounts
+Use the following accounts to test the application (Default password: `password`):
+- **Admin Account**: `admin@recloth.id` (Filament CMS)
+- **Seller Account**: `penjual@recloth.id`
+- **Buyer Account**: `pembeli@recloth.id`
 
 ## Environment Configuration
 Ensure you have the following environment variables configured:
