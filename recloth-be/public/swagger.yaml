@@ -1,0 +1,1253 @@
+openapi: 3.0.3
+info:
+  title: Recloth API
+  description: |
+    **Recloth** — Marketplace Thrifting Fashion Indonesia.
+    
+    API Documentation untuk integrasi Frontend (Next.js) dengan Backend (Laravel 12).
+    
+    ## Authentication
+    Semua endpoint yang memerlukan auth menggunakan **Bearer Token** (Laravel Sanctum).
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    ## Response Format
+    Semua response menggunakan format standar:
+    ```json
+    { "success": true/false, "message": "...", "data": {...} }
+    ```
+    
+    ## Credentials Demo
+    - **Super Admin**: `super_admin@recloth.id` / `password123`
+    - **User**: `user1@recloth.id` / `password`
+    
+    ## Admin Panel
+    Akses Filament Admin: `http://127.0.0.1:8000/admin`
+  version: 1.0.0
+  contact:
+    name: Recloth Team
+    email: dev@recloth.id
+
+servers:
+  - url: http://127.0.0.1:8000/api
+    description: Development (Laragon)
+  - url: https://api.recloth.id
+    description: Production
+
+tags:
+  - name: Auth
+    description: Autentikasi user
+  - name: Profile
+    description: Profil user
+  - name: Products
+    description: Produk marketplace
+  - name: Stores
+    description: Toko penjual
+  - name: Categories
+    description: Kategori produk
+  - name: Cart
+    description: Keranjang belanja
+  - name: Addresses
+    description: Alamat pengiriman
+  - name: Shipping
+    description: Kalkulasi ongkir (Raja Ongkir)
+  - name: Promos
+    description: Kode promo & diskon
+  - name: Orders
+    description: Pesanan (beli)
+  - name: Reviews
+    description: Ulasan & rating
+  - name: Wishlist
+    description: Wishlist produk
+  - name: Follow
+    description: Ikuti toko
+  - name: Chat
+    description: Pesan realtime
+  - name: Notifications
+    description: Notifikasi in-app
+  - name: Wallet
+    description: Saldo & wallet
+  - name: Withdrawals
+    description: Penarikan saldo
+  - name: Swap
+    description: Tukar barang
+  - name: Reports
+    description: Laporan pengguna
+  - name: Webhooks
+    description: Webhook eksternal
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        message: { type: string, example: "OK" }
+        data: { type: object }
+
+    ErrorResponse:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        message: { type: string, example: "Validation failed" }
+        data: { nullable: true }
+
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string, nullable: true }
+        avatar: { type: string, nullable: true }
+        role: { type: string, enum: [user, super_admin] }
+        status: { type: string, enum: [active, suspended] }
+        created_at: { type: string, format: date-time }
+
+    Store:
+      type: object
+      properties:
+        id: { type: integer }
+        user_id: { type: integer }
+        name: { type: string }
+        slug: { type: string }
+        description: { type: string, nullable: true }
+        photo: { type: string, nullable: true }
+        city: { type: string }
+        province: { type: string }
+        rating: { type: number, format: float }
+        total_sales: { type: integer }
+        status: { type: string, enum: [active, inactive, suspended] }
+
+    Product:
+      type: object
+      properties:
+        id: { type: integer }
+        store_id: { type: integer }
+        category_id: { type: integer }
+        name: { type: string }
+        slug: { type: string }
+        description: { type: string }
+        condition: { type: string, enum: [A, B, C, D] }
+        price: { type: integer }
+        size: { type: string }
+        weight: { type: integer }
+        status: { type: string, enum: [active, inactive, sold, reserved] }
+        store: { $ref: '#/components/schemas/Store' }
+        photos: { type: array, items: { $ref: '#/components/schemas/ProductPhoto' } }
+
+    ProductPhoto:
+      type: object
+      properties:
+        id: { type: integer }
+        photo_url: { type: string }
+        is_primary: { type: boolean }
+        sort_order: { type: integer }
+
+    Order:
+      type: object
+      properties:
+        id: { type: integer }
+        buyer_id: { type: integer }
+        store_id: { type: integer }
+        product_id: { type: integer }
+        type: { type: string, enum: [buy, swap] }
+        status:
+          type: string
+          enum: [menunggu_bayar, dikonfirmasi, dikirim, selesai, dibatalkan, direfund]
+        subtotal: { type: integer }
+        ongkir: { type: integer }
+        diskon: { type: integer }
+        komisi: { type: integer }
+        total: { type: integer }
+        courier_code: { type: string, nullable: true }
+        courier_service: { type: string, nullable: true }
+        resi: { type: string, nullable: true }
+        escrow_status: { type: string, enum: [held, released, refunded] }
+
+    Pagination:
+      type: object
+      properties:
+        current_page: { type: integer }
+        last_page: { type: integer }
+        per_page: { type: integer }
+        total: { type: integer }
+
+paths:
+  # ─── AUTH ───────────────────────────────────────────────────────────────────
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Daftar akun baru
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, password_confirmation]
+              properties:
+                name: { type: string, example: "Budi Santoso" }
+                email: { type: string, format: email, example: "budi@email.com" }
+                phone: { type: string, example: "081234567890" }
+                password: { type: string, minLength: 8, example: "password123" }
+                password_confirmation: { type: string, example: "password123" }
+      responses:
+        201:
+          description: Berhasil daftar
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user: { $ref: '#/components/schemas/User' }
+                          token: { type: string }
+        422:
+          description: Validasi gagal
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email, example: "user1@recloth.id" }
+                password: { type: string, example: "password" }
+      responses:
+        200:
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user: { $ref: '#/components/schemas/User' }
+                          token: { type: string, example: "1|AbCdEf..." }
+        401:
+          description: Kredensial tidak valid
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Logout berhasil
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Data user yang sedang login
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Data user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data: { $ref: '#/components/schemas/User' }
+
+  # ─── PROFILE ────────────────────────────────────────────────────────────────
+
+  /profile:
+    get:
+      tags: [Profile]
+      summary: Tampilkan profil + info toko
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Data profil user
+    post:
+      tags: [Profile]
+      summary: Update profil (nama, phone, avatar)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                phone: { type: string }
+                avatar: { type: string, format: binary }
+      responses:
+        200:
+          description: Profil diperbarui
+
+  /profile/password:
+    put:
+      tags: [Profile]
+      summary: Ganti password
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [current_password, password, password_confirmation]
+              properties:
+                current_password: { type: string }
+                password: { type: string, minLength: 8 }
+                password_confirmation: { type: string }
+      responses:
+        200:
+          description: Password diubah
+        422:
+          description: Password saat ini salah
+
+  # ─── CATEGORIES ─────────────────────────────────────────────────────────────
+
+  /categories:
+    get:
+      tags: [Categories]
+      summary: List semua kategori (public)
+      responses:
+        200:
+          description: List kategori
+
+  # ─── PRODUCTS ───────────────────────────────────────────────────────────────
+
+  /products:
+    get:
+      tags: [Products]
+      summary: List produk dengan search & filter (public)
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          description: Kata kunci pencarian (Meilisearch)
+        - name: category_id
+          in: query
+          schema: { type: integer }
+        - name: condition
+          in: query
+          schema: { type: string, enum: [A, B, C, D] }
+        - name: size
+          in: query
+          schema: { type: string }
+        - name: city
+          in: query
+          schema: { type: string }
+        - name: min_price
+          in: query
+          schema: { type: integer }
+        - name: max_price
+          in: query
+          schema: { type: integer }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [latest, cheapest, expensive] }
+        - name: page
+          in: query
+          schema: { type: integer }
+      responses:
+        200:
+          description: List produk (paginated)
+    post:
+      tags: [Products]
+      summary: Upload produk baru (seller)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [name, description, category_id, condition, price, size, weight]
+              properties:
+                name: { type: string }
+                description: { type: string }
+                category_id: { type: integer }
+                condition: { type: string, enum: [A, B, C, D] }
+                price: { type: integer }
+                size: { type: string }
+                weight: { type: integer, description: "Berat dalam gram" }
+                photos[]: { type: array, items: { type: string, format: binary }, description: "Max 8 foto" }
+      responses:
+        201:
+          description: Produk berhasil dibuat
+
+  /products/{slug}:
+    get:
+      tags: [Products]
+      summary: Detail produk (public)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Detail produk
+
+  /products/{id}:
+    put:
+      tags: [Products]
+      summary: Update produk (owner)
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Produk diperbarui
+    delete:
+      tags: [Products]
+      summary: Hapus produk (owner)
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Produk dihapus
+
+  /products/{id}/toggle:
+    patch:
+      tags: [Products]
+      summary: Toggle aktif/nonaktif produk
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Status diperbarui
+
+  # ─── STORES ─────────────────────────────────────────────────────────────────
+
+  /stores/{slug}:
+    get:
+      tags: [Stores]
+      summary: Profil toko publik
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Data toko
+
+  /stores:
+    post:
+      tags: [Stores]
+      summary: Buat toko baru (seller)
+      security: [{ BearerAuth: [] }]
+      responses:
+        201:
+          description: Toko dibuat
+    put:
+      tags: [Stores]
+      summary: Update info toko
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Toko diperbarui
+
+  /stores/my/stats:
+    get:
+      tags: [Stores]
+      summary: Statistik toko sendiri
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Stats toko
+
+  /stores/my/products:
+    get:
+      tags: [Stores]
+      summary: List produk toko sendiri (seller)
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: List produk seller
+
+  /stores/{slug}/reviews:
+    get:
+      tags: [Stores]
+      summary: List ulasan toko (public)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: List ulasan
+
+  /stores/{slug}/follow:
+    post:
+      tags: [Follow]
+      summary: Follow toko
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Berhasil follow
+    delete:
+      tags: [Follow]
+      summary: Unfollow toko
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Berhasil unfollow
+    get:
+      tags: [Follow]
+      summary: Cek status follow
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Status follow
+
+  # ─── CART ───────────────────────────────────────────────────────────────────
+
+  /cart:
+    get:
+      tags: [Cart]
+      summary: Lihat keranjang
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Isi keranjang
+    post:
+      tags: [Cart]
+      summary: Tambah produk ke keranjang
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_id]
+              properties:
+                product_id: { type: integer }
+      responses:
+        200:
+          description: Ditambahkan
+
+  /cart/{product_id}:
+    delete:
+      tags: [Cart]
+      summary: Hapus item dari keranjang
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Dihapus
+
+  # ─── ADDRESSES ──────────────────────────────────────────────────────────────
+
+  /addresses:
+    get:
+      tags: [Addresses]
+      summary: List alamat pengiriman
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: List alamat
+    post:
+      tags: [Addresses]
+      summary: Tambah alamat baru
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [label, recipient_name, phone, address, city, province, postal_code]
+              properties:
+                label: { type: string, example: "Rumah" }
+                recipient_name: { type: string }
+                phone: { type: string }
+                address: { type: string }
+                city: { type: string }
+                province: { type: string }
+                postal_code: { type: string }
+                is_primary: { type: boolean }
+      responses:
+        201:
+          description: Alamat ditambahkan
+
+  /addresses/{id}:
+    put:
+      tags: [Addresses]
+      summary: Update alamat
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Alamat diperbarui
+    delete:
+      tags: [Addresses]
+      summary: Hapus alamat
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Alamat dihapus
+
+  /addresses/{id}/primary:
+    patch:
+      tags: [Addresses]
+      summary: Set alamat sebagai utama
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Alamat utama diperbarui
+
+  # ─── SHIPPING ───────────────────────────────────────────────────────────────
+
+  /shipping/cost:
+    post:
+      tags: [Shipping]
+      summary: Kalkulasi ongkir (Raja Ongkir)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [origin, destination, weight, courier]
+              properties:
+                origin: { type: string, description: "Kode kota asal (Raja Ongkir)" }
+                destination: { type: string, description: "Kode kota tujuan" }
+                weight: { type: integer, description: "Berat dalam gram" }
+                courier: { type: string, example: "jne" }
+      responses:
+        200:
+          description: List layanan + biaya ongkir
+
+  # ─── PROMOS ─────────────────────────────────────────────────────────────────
+
+  /promos/check:
+    post:
+      tags: [Promos]
+      summary: Validasi & hitung diskon kode promo
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code, subtotal]
+              properties:
+                code: { type: string, example: "RECLOTH10" }
+                subtotal: { type: integer, example: 150000 }
+      responses:
+        200:
+          description: Promo valid + diskon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:
+                    type: object
+                    properties:
+                      discount: { type: integer }
+                      total: { type: integer }
+        422:
+          description: Kode tidak valid / kuota habis / min purchase
+
+  # ─── ORDERS ─────────────────────────────────────────────────────────────────
+
+  /orders:
+    get:
+      tags: [Orders]
+      summary: List pesanan pembeli
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [menunggu_bayar, dikonfirmasi, dikirim, selesai, dibatalkan, direfund] }
+      responses:
+        200:
+          description: List pesanan (paginated)
+
+  /orders/seller:
+    get:
+      tags: [Orders]
+      summary: List pesanan masuk ke toko (seller)
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Pesanan seller
+
+  /orders/checkout:
+    post:
+      tags: [Orders]
+      summary: Checkout produk
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_id, courier_code, courier_service, ongkir, payment_method]
+              properties:
+                product_id: { type: integer }
+                courier_code: { type: string, enum: [jne, jnt, sicepat, pos, ninja] }
+                courier_service: { type: string, example: "REG" }
+                ongkir: { type: integer }
+                diskon: { type: integer, default: 0 }
+                payment_method:
+                  type: string
+                  enum: [qris, va_bca, va_mandiri, va_bni, va_bri, gopay, ovo, dana, shopepay, card]
+      responses:
+        201:
+          description: Checkout berhasil + payment_url Midtrans
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      order: { $ref: '#/components/schemas/Order' }
+                      payment_url: { type: string, format: uri }
+
+  /orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Detail pesanan
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Detail pesanan
+
+  /orders/{id}/resi:
+    post:
+      tags: [Orders]
+      summary: Input nomor resi (seller)
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resi, courier_code]
+              properties:
+                resi: { type: string }
+                courier_code: { type: string }
+      responses:
+        200:
+          description: Resi berhasil diinput
+
+  /orders/{id}/tracking:
+    get:
+      tags: [Orders]
+      summary: Tracking pengiriman via Raja Ongkir
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Data tracking
+
+  /orders/{id}/confirm:
+    post:
+      tags: [Orders]
+      summary: Konfirmasi terima barang (buyer) — trigger escrow release
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Order selesai, saldo seller bertambah
+
+  # ─── REVIEWS ────────────────────────────────────────────────────────────────
+
+  /orders/{id}/reviews:
+    post:
+      tags: [Reviews]
+      summary: Beri ulasan untuk order yang sudah selesai
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rating]
+              properties:
+                rating: { type: integer, minimum: 1, maximum: 5 }
+                comment: { type: string, maxLength: 500 }
+      responses:
+        201:
+          description: Ulasan berhasil
+        422:
+          description: Sudah pernah ulasan / order belum selesai
+
+  /reviews/{id}/reply:
+    post:
+      tags: [Reviews]
+      summary: Seller balas ulasan
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [comment]
+              properties:
+                comment: { type: string }
+      responses:
+        201:
+          description: Balasan dikirim
+
+  # ─── WISHLIST ───────────────────────────────────────────────────────────────
+
+  /wishlist:
+    get:
+      tags: [Wishlist]
+      summary: List wishlist
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Wishlist user
+
+  /wishlist/{product_id}:
+    post:
+      tags: [Wishlist]
+      summary: Tambah ke wishlist
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        201:
+          description: Ditambahkan
+    delete:
+      tags: [Wishlist]
+      summary: Hapus dari wishlist
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Dihapus
+    get:
+      tags: [Wishlist]
+      summary: Cek apakah produk ada di wishlist
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Status wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      in_wishlist: { type: boolean }
+
+  # ─── CHAT ───────────────────────────────────────────────────────────────────
+
+  /conversations:
+    get:
+      tags: [Chat]
+      summary: List semua conversation
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: List conversation
+    post:
+      tags: [Chat]
+      summary: Buka/dapatkan conversation dengan toko
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [store_id]
+              properties:
+                store_id: { type: integer }
+      responses:
+        200:
+          description: Conversation (baru/existing)
+
+  /conversations/{id}/messages:
+    get:
+      tags: [Chat]
+      summary: Ambil pesan dalam conversation
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: List pesan
+    post:
+      tags: [Chat]
+      summary: Kirim pesan
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message: { type: string }
+      responses:
+        201:
+          description: Pesan terkirim (broadcast via Reverb)
+
+  # ─── NOTIFICATIONS ──────────────────────────────────────────────────────────
+
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: List notifikasi user
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Notifikasi (paginated)
+
+  /notifications/unread-count:
+    get:
+      tags: [Notifications]
+      summary: Jumlah notifikasi belum dibaca
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Count
+
+  /notifications/{id}/read:
+    patch:
+      tags: [Notifications]
+      summary: Tandai notifikasi sudah dibaca
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Ditandai
+
+  /notifications/read-all:
+    patch:
+      tags: [Notifications]
+      summary: Tandai semua notifikasi dibaca
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Semua ditandai
+
+  # ─── WALLET ─────────────────────────────────────────────────────────────────
+
+  /wallet:
+    get:
+      tags: [Wallet]
+      summary: Informasi saldo wallet
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Saldo & held_balance
+
+  /wallet/transactions:
+    get:
+      tags: [Wallet]
+      summary: Riwayat transaksi wallet
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: List transaksi
+
+  # ─── WITHDRAWALS ────────────────────────────────────────────────────────────
+
+  /withdrawals:
+    get:
+      tags: [Withdrawals]
+      summary: Riwayat withdrawal
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: List withdrawal
+    post:
+      tags: [Withdrawals]
+      summary: Request withdrawal saldo
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, bank_name, account_number, account_name]
+              properties:
+                amount: { type: integer, minimum: 50000, description: "Minimum Rp 50.000 (dari config)" }
+                bank_name: { type: string, example: "BCA" }
+                account_number: { type: string }
+                account_name: { type: string }
+      responses:
+        201:
+          description: Withdrawal diajukan (pending approval admin)
+        422:
+          description: Saldo tidak cukup / dibawah minimum
+
+  # ─── SWAP ───────────────────────────────────────────────────────────────────
+
+  /swaps:
+    post:
+      tags: [Swap]
+      summary: Ajukan swap (tukar barang)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [target_product_id, requester_product_id]
+              properties:
+                target_product_id: { type: integer, description: "Produk yang ingin ditukar" }
+                requester_product_id: { type: integer, description: "Produk milik requester" }
+      responses:
+        201:
+          description: Swap diajukan
+
+  /swaps/{id}/respond:
+    patch:
+      tags: [Swap]
+      summary: Respon swap (seller terima/tolak)
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [diterima, ditolak] }
+      responses:
+        200:
+          description: Respon berhasil
+
+  /swaps/{id}/resi:
+    post:
+      tags: [Swap]
+      summary: Input resi untuk swap
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resi, side]
+              properties:
+                resi: { type: string }
+                side: { type: string, enum: [buyer, seller] }
+      responses:
+        200:
+          description: Resi swap berhasil
+
+  /swaps/{id}/confirm:
+    post:
+      tags: [Swap]
+      summary: Konfirmasi terima barang swap
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Swap selesai
+
+  # ─── REPORTS ────────────────────────────────────────────────────────────────
+
+  /reports:
+    post:
+      tags: [Reports]
+      summary: Laporkan pengguna
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reported_user_id, reason]
+              properties:
+                reported_user_id: { type: integer }
+                reason: { type: string }
+                description: { type: string }
+      responses:
+        201:
+          description: Laporan terkirim (pending review admin)
+
+  # ─── WEBHOOKS ───────────────────────────────────────────────────────────────
+
+  /webhooks/midtrans:
+    post:
+      tags: [Webhooks]
+      summary: Webhook notifikasi pembayaran Midtrans
+      description: |
+        Endpoint ini dipanggil oleh Midtrans server setelah ada perubahan status pembayaran.
+        
+        **PENTING**: Endpoint ini public (tidak butuh auth), namun diverifikasi via signature key Midtrans.
+        
+        Flow setelah payment confirmed:
+        1. Update payment status → paid
+        2. Update order status → dikonfirmasi
+        3. Hold funds di escrow (wallet.held_balance seller bertambah)
+        4. Broadcast event PaymentConfirmed via Reverb ke buyer & seller
+        5. Kirim notifikasi ke buyer & seller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Payload dari Midtrans
+              properties:
+                order_id: { type: string }
+                transaction_status: { type: string }
+                fraud_status: { type: string }
+                signature_key: { type: string }
+      responses:
+        200:
+          description: Webhook diproses
+        400:
+          description: Signature tidak valid

@@ -1,0 +1,62 @@
+# Monorepo Ignores
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+dist/
+build/
+.next/
+out/
+node_modules/
+vendor/
+
+# Backend Specific
+recloth-be/.env
+recloth-be/storage/*.key
+recloth-be/storage/framework/cache/data/*
+recloth-be/storage/framework/sessions/*
+recloth-be/storage/framework/testing/*
+recloth-be/storage/framework/views/*
+recloth-be/storage/logs/*.log
+recloth-be/vendor/
+recloth-be/.phpunit.result.cache
+recloth-be/public/storage
+recloth-be/public/hot
+
+# Frontend Specific
+recloth-fe/.env
+recloth-fe/.env.local
+recloth-fe/node_modules/
+recloth-fe/.next/
+recloth-fe/out/
+recloth-fe/build/
+
+# Credentials & Sensitive
+auth.json
+*.p12
+*.pem
+*.key
+credentials.json
+.gemini/
+.agents/
+.agent/
+_agents/
+_agent/
+brain/
+mcp/
+config/mcp*
+
+#  Metadata
+*.webp
+*.png-metadata
+*.webp
+*.mp4
+*.mov
+log.txt
+lint_output.txt

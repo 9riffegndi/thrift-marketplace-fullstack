@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recloth API Documentation</title>
+  <meta name="description" content="Swagger UI documentation for Recloth Marketplace API" />
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css" />
+  <style>
+    body { margin: 0; background: #f8f9fa; }
+    .topbar { background: #4f46e5 !important; }
+    .topbar-wrapper img { display: none; }
+    .topbar-wrapper::before { content: 'recloth API'; font-weight: 900; font-size: 1.5rem; color: white; letter-spacing: -0.025em; }
+    .topbar-wrapper::after { content: 'docs'; color: #a5b4fc; font-weight: 900; font-size: 1.5rem; }
+    #swagger-ui { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .swagger-ui .info .title { color: #4f46e5; }
+    .swagger-ui .btn.authorize { background-color: #4f46e5 !important; border-color: #4f46e5 !important; }
+    .swagger-ui .opblock.opblock-post .opblock-summary { border-color: #10b981; }
+    .swagger-ui .opblock.opblock-post { background: rgba(16, 185, 129, 0.05); border-color: #10b981; }
+  </style>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+<script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"></script>
+<script>
+  window.onload = function() {
+    window.ui = SwaggerUIBundle({
+      url: "/swagger.yaml",
+      dom_id: '#swagger-ui',
+      deepLinking: true,
+      presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+      plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+      layout: "StandaloneLayout",
+      persistAuthorization: true,
+      tryItOutEnabled: true,
+      displayRequestDuration: true,
+      filter: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    })
+  }
+</script>
+</body>
+</html>

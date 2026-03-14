@@ -1,0 +1,12 @@
+openapi: 3.0.0
+info:
+  title: Thrift Marketplace API
+  version: 1.0.0
+  description: API for the Thrift Marketplace Fullstack application.
+paths:
+  /api/auth/login:
+    post:
+      summary: Login user
+  /api/products:
+    get:
+      summary: Get all products
