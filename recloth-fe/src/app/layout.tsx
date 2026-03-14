@@ -13,9 +13,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 export const metadata: Metadata = {
   title: { default: 'Recloth — Fashion Retail Premium', template: '%s | Recloth' },
   description: 'Marketplace thrifting fashion Indonesia. Jual beli pakaian prelove berkualitas.',
-  icons: {
-    icon: '/logo-recloth.png',
-  },
+  icons: [
+    { rel: 'icon', url: '/favicon.ico' },
+    { rel: 'apple-touch-icon', url: '/logo-recloth.png' },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

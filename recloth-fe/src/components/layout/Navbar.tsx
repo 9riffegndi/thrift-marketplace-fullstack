@@ -52,7 +52,7 @@ export function Navbar() {
 
         {/* Center: Logo */}
         <Link href="/" className="flex items-center gap-3 group px-4">
-          <img src="/logo-recloth.png" alt="Recloth Logo" className="h-10 w-auto transition-transform group-hover:scale-105" />
+          <img src="/logo-recloth.png" alt="Recloth Logo" className="h-14 w-auto transition-transform group-hover:scale-105" />
           <span className="font-black text-2xl tracking-tighter uppercase hidden sm:block leading-none text-black">Recloth</span>
         </Link>
 
