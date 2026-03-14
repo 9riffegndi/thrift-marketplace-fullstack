@@ -90,54 +90,99 @@ paths:
     get:
       tags: [Profile]
       summary: Get user profile
+      responses:
+        '200':
+          description: Success
     post:
       tags: [Profile]
       summary: Update user profile
+      responses:
+        '200':
+          description: Success
   /cart:
     get:
       tags: [Cart]
       summary: Get cart items
+      responses:
+        '200':
+          description: Success
     post:
       tags: [Cart]
       summary: Add item to cart
+      responses:
+        '200':
+          description: Success
   /cart/{product_id}:
     delete:
       tags: [Cart]
       summary: Remove item from cart
+      responses:
+        '200':
+          description: Success
   /orders/checkout:
     post:
       tags: [Orders]
       summary: Create an order/checkout
+      responses:
+        '200':
+          description: Success
   /orders:
     get:
       tags: [Orders]
       summary: List buyer orders
+      responses:
+        '200':
+          description: Success
   /orders/seller:
     get:
       tags: [Orders]
       summary: List seller orders
+      responses:
+        '200':
+          description: Success
   /swaps:
     get:
       tags: [Swap]
       summary: List swap requests
+      responses:
+        '200':
+          description: Success
     post:
       tags: [Swap]
       summary: Create swap request
+      responses:
+        '200':
+          description: Success
   /wallet:
     get:
       tags: [Wallet]
       summary: Get wallet balance
+      responses:
+        '200':
+          description: Success
   /conversations:
     get:
       tags: [Chat]
       summary: List conversations
+      responses:
+        '200':
+          description: Success
     post:
       tags: [Chat]
       summary: Create/Get conversation
+      responses:
+        '200':
+          description: Success
   /conversations/{id}/messages:
     get:
       tags: [Chat]
       summary: List messages
+      responses:
+        '200':
+          description: Success
     post:
       tags: [Chat]
       summary: Send message
+      responses:
+        '200':
+          description: Success
