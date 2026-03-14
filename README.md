@@ -8,7 +8,8 @@ A modern, high-performance C2C (Consumer-to-Consumer) Marketplace and Swap Platf
 - **api.yaml**: OpenAPI 3.0 Documentation for the system.
 
 ## Main Features
-- **Premium Shop**: Curated catalog with advanced filtering.
+- **Premium Shop**: Curated 3-column responsive grid with infinite scroll pagination.
+- **Forgot Password**: Secure multi-step password recovery system (FE & BE).
 - **Real-time Chat**: Fully integrated chat system with delivery status indicators.
 - **Product Swap**: Unique barter system with state-managed request flow.
 - **Secure Payment**: Integrated with Midtrans for seamless transactions.
