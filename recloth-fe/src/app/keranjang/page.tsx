@@ -5,13 +5,21 @@ import { formatRupiah } from '@/lib/utils/format'
 import { Trash2, ShoppingBag, ArrowRight, Info, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/shared/Skeleton'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
 
 export default function CartPage() {
+  const router = useRouter()
   const { items = [], isLoading, removeItem: removeFromCart } = useCart()
+
+  const handleGlobalCheckout = () => {
+    if (items.length > 0) {
+      router.push(`/checkout/${items[0].product.id}`)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -134,7 +142,10 @@ export default function CartPage() {
           </div>
 
           <div className="space-y-4">
-             <button className="w-full h-14 bg-black text-white font-black text-[10px] uppercase tracking-[0.25em] transition-all hover:bg-zinc-800 shadow-none active:scale-[0.98] rounded-none">
+             <button 
+               onClick={handleGlobalCheckout}
+               className="w-full h-14 bg-black text-white font-black text-[10px] uppercase tracking-[0.25em] transition-all hover:bg-zinc-800 shadow-none active:scale-[0.98] rounded-none"
+             >
                Selesaikan Pembayaran
              </button>
              <Link 
