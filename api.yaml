@@ -1,12 +1,143 @@
 openapi: 3.0.0
 info:
-  title: Thrift Marketplace API
+  title: Recloth API
   version: 1.0.0
-  description: API for the Thrift Marketplace Fullstack application.
+  description: API Documentation for Recloth - Premium C2C Marketplace and Swap Platform.
+
+servers:
+  - url: http://localhost:8000/api
+    description: Local Development Server
+
+components:
+  securitySchemes:
+    SanctumAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - SanctumAuth: []
+
 paths:
-  /api/auth/login:
+  # --- PUBLIC ROUTES ---
+  /auth/register:
     post:
-      summary: Login user
-  /api/products:
+      tags: [Auth]
+      summary: Register a new user
+      responses:
+        '201':
+          description: Created
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: User Login
+      responses:
+        '200':
+          description: Success
+  /products:
     get:
-      summary: Get all products
+      tags: [Public]
+      summary: List all products (Search/Filter)
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /products/{slug}:
+    get:
+      tags: [Public]
+      summary: Get product detail
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /categories:
+    get:
+      tags: [Public]
+      summary: List categories
+      responses:
+        '200':
+          description: Success
+  /stores/{slug}:
+    get:
+      tags: [Public]
+      summary: Get store profile
+      responses:
+        '200':
+          description: Success
+
+  # --- AUTHENTICATED ROUTES ---
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current authenticated user
+      responses:
+        '200':
+          description: Success
+  /profile:
+    get:
+      tags: [Profile]
+      summary: Get user profile
+    post:
+      tags: [Profile]
+      summary: Update user profile
+  /cart:
+    get:
+      tags: [Cart]
+      summary: Get cart items
+    post:
+      tags: [Cart]
+      summary: Add item to cart
+  /cart/{product_id}:
+    delete:
+      tags: [Cart]
+      summary: Remove item from cart
+  /orders/checkout:
+    post:
+      tags: [Orders]
+      summary: Create an order/checkout
+  /orders:
+    get:
+      tags: [Orders]
+      summary: List buyer orders
+  /orders/seller:
+    get:
+      tags: [Orders]
+      summary: List seller orders
+  /swaps:
+    get:
+      tags: [Swap]
+      summary: List swap requests
+    post:
+      tags: [Swap]
+      summary: Create swap request
+  /wallet:
+    get:
+      tags: [Wallet]
+      summary: Get wallet balance
+  /conversations:
+    get:
+      tags: [Chat]
+      summary: List conversations
+    post:
+      tags: [Chat]
+      summary: Create/Get conversation
+  /conversations/{id}/messages:
+    get:
+      tags: [Chat]
+      summary: List messages
+    post:
+      tags: [Chat]
+      summary: Send message
