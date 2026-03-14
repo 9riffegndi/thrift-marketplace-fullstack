@@ -44,7 +44,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 py-20 bg-white">
       <div className="w-full max-w-[400px] space-y-10">
-        <div className="text-center space-y-2">
+        <div className="flex flex-col items-center text-center space-y-2">
+          <img src="/logo-recloth.png" alt="Recloth Logo" className="h-32 w-auto object-contain" />
           <h1 className="text-2xl font-bold uppercase tracking-tight">Masuk</h1>
           <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">
             Akses akun Recloth kamu

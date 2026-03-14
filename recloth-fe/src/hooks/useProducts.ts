@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
 import { get, post, patch, del } from '@/lib/api'
 import { toast } from 'sonner'
 import type { Product, PaginatedData, ApiResponse } from '@/types'
@@ -26,6 +26,23 @@ export function useProducts(filters: ProductFilters = {}) {
       const res = await get<PaginatedData<Product>>('/products', filters)
       return res.data.data
     },
+  })
+}
+
+export function useInfiniteProducts(filters: ProductFilters = {}) {
+  return useInfiniteQuery({
+    queryKey: ['products-infinite', filters],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await get<PaginatedData<Product>>('/products', { ...filters, page: pageParam })
+      return res.data.data
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.current_page < lastPage.last_page) {
+        return lastPage.current_page + 1
+      }
+      return undefined
+    },
+    initialPageParam: 1,
   })
 }
 

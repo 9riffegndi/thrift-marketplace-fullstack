@@ -69,16 +69,16 @@ export function ProductCard({ product, className }: ProductCardProps) {
         </div>
 
         {/* Info Container */}
-        <div className="pt-4 pb-2 flex flex-col flex-1 min-h-[90px]">
-          <h3 className="text-[11px] font-black uppercase tracking-[0.1em] text-black h-9 leading-[1.3] group-hover:underline underline-offset-4 decoration-border">
+        <div className="pt-6 pb-2 flex flex-col flex-1 min-h-[100px]">
+          <h3 className="text-xs sm:text-sm font-black uppercase tracking-[0.1em] text-black h-auto leading-[1.4] group-hover:underline underline-offset-4 decoration-border mb-2">
             {product.name}
           </h3>
           
-          <div className="mt-1 flex items-baseline gap-2">
-            <PriceDisplay price={product.price} className="text-sm font-black text-black" />
+          <div className="mt-auto flex items-baseline gap-2">
+            <PriceDisplay price={product.price} className="text-lg sm:text-xl font-black text-black" />
           </div>
           
-          <div className="mt-2 flex items-center gap-1.5 text-[9px] text-zinc-500 uppercase tracking-widest font-black">
+          <div className="mt-4 flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-widest font-black border-t border-zinc-100 pt-3">
             <span className="truncate">{product.store?.name}</span>
             <span className="text-zinc-300">•</span>
             <span className="truncate">{product.store?.city || 'INDONESIA'}</span>

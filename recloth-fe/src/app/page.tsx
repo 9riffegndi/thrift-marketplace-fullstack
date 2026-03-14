@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { useProducts } from '@/hooks/useProducts'
+import { useInfiniteProducts } from '@/hooks/useProducts'
 import { useCategories } from '@/hooks/useCategories'
 import { useBanners, useSystemConfig } from '@/hooks/useDiscovery'
 import { ProductGrid } from '@/components/product/ProductGrid'
@@ -15,20 +15,27 @@ import Image from 'next/image'
 export default function HomePage() {
   const [category, setCategory] = useState<number | null>(null)
   const [sort, setSort] = useState('latest')
-  const [perPage, setPerPage] = useState(10)
 
   const { data: categories } = useCategories()
   const { data: banners, isLoading: bannersLoading } = useBanners()
   const { data: configs } = useSystemConfig()
   
-  const { data: productsResult, isLoading, isError, refetch } = useProducts({ 
+  const { 
+    data: productsData, 
+    isLoading, 
+    isError, 
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteProducts({ 
     category_id: category || undefined, 
     sort,
-    per_page: perPage
+    per_page: 9 // Using 9 for 3-column layout symmetry
   })
 
-  // productsResult is the paginated object { data, total, current_page, last_page }
-  const products = productsResult?.data || []
+  const products = productsData?.pages.flatMap(page => page.data) || []
+  const totalProducts = productsData?.pages[0]?.total || 0
 
   if (isError) {
     return (
@@ -103,7 +110,6 @@ export default function HomePage() {
           <button
             onClick={() => {
               setCategory(null)
-              setPerPage(10)
             }}
             className={cn(
               "whitespace-nowrap px-6 h-9 text-xs font-bold uppercase tracking-widest border transition-colors",
@@ -119,7 +125,6 @@ export default function HomePage() {
               key={cat.id}
               onClick={() => {
                 setCategory(cat.id)
-                setPerPage(10)
               }}
               className={cn(
                 "whitespace-nowrap px-8 h-10 text-[10px] font-black uppercase tracking-[0.2em] border transition-all",
@@ -143,7 +148,7 @@ export default function HomePage() {
               {category ? categories?.find(c => c.id === category)?.name : 'Semua Katalog'}
             </h2>
             <p className="text-[10px] text-zinc-400 uppercase tracking-widest mt-1.5 font-bold">
-              {productsResult?.total || 0} Produk Ditemukan
+              {totalProducts} Produk Ditemukan
             </p>
           </div>
 
@@ -157,7 +162,6 @@ export default function HomePage() {
               value={sort}
               onChange={(e) => {
                 setSort(e.target.value)
-                setPerPage(10)
               }}
               className="bg-transparent border-none text-[10px] font-bold uppercase tracking-[0.2em] outline-none cursor-pointer text-zinc-500 hover:text-black transition-colors"
             >
@@ -169,17 +173,17 @@ export default function HomePage() {
         </div>
 
         {/* Product Grid */}
-        <ProductGrid products={products} isLoading={isLoading} />
+        <ProductGrid products={products} isLoading={isLoading || isFetchingNextPage} />
 
         {/* Load More */}
-        {productsResult && products.length < productsResult.total && (
+        {hasNextPage && (
           <div className="flex justify-center pt-16">
             <button 
-              onClick={() => setPerPage(prev => prev + 10)}
-              disabled={isLoading}
-              className="h-12 px-12 border border-foreground text-foreground font-bold text-xs uppercase tracking-widest hover:bg-foreground hover:text-background transition-colors disabled:opacity-50"
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+              className="h-14 px-16 bg-black text-white font-black text-[10px] uppercase tracking-[0.3em] hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50"
             >
-              {isLoading ? 'Memuat...' : 'Muat Lebih Banyak'}
+              {isFetchingNextPage ? 'Memuat...' : 'Muat Lebih Banyak'}
             </button>
           </div>
         )}

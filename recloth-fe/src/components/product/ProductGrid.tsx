@@ -11,19 +11,17 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ products, isLoading }: ProductGridProps) {
-  if (isLoading) {
+  if (isLoading && products.length === 0) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-px bg-border border border-border">
-        {[...Array(10)].map((_, i) => (
-          <div key={i} className="bg-background">
-            <ProductCardSkeleton />
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+        {[...Array(6)].map((_, i) => (
+          <ProductCardSkeleton key={i} />
         ))}
       </div>
     )
   }
 
-  if (products.length === 0) {
+  if (products.length === 0 && !isLoading) {
     return (
       <EmptyState
         icon={ShoppingBag}
@@ -34,11 +32,12 @@ export function ProductGrid({ products, isLoading }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-px bg-border border border-border">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
       {products.map((product) => (
-        <div key={product.id} className="bg-background">
-          <ProductCard product={product} />
-        </div>
+        <ProductCard key={product.id} product={product} />
+      ))}
+      {isLoading && [...Array(3)].map((_, i) => (
+        <ProductCardSkeleton key={`loading-${i}`} />
       ))}
     </div>
   )
