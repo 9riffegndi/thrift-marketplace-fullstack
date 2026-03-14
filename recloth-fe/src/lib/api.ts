@@ -52,6 +52,8 @@ export const authApi = {
     api.post<ApiResponse<{ user: User; token: string }>>('/auth/register', data),
   logout: () => api.post<ApiResponse<null>>('/auth/logout'),
   me: () => api.get<ApiResponse<{ user: User; store: Store | null }>>('/auth/me'),
+  forgotPassword: (email: string) => api.post<ApiResponse<{ token: string }>>('/auth/forgot-password', { email }),
+  resetPassword: (data: any) => api.post<ApiResponse<null>>('/auth/reset-password', data),
 }
 
 // ─── Profile ──────────────────────────────────────────────────────────────────

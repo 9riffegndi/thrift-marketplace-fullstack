@@ -36,7 +36,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
     <div className={cn("group relative flex flex-col bg-background transition-colors", className)}>
       <Link href={`/produk/${product.slug}`} className="block">
         {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-zinc-100">
+        <div className="relative aspect-[6/9] overflow-hidden bg-zinc-100">
           <Image
             src={imgError ? '/placeholder-product.png' : primaryPhoto}
             alt={product.name || 'Produk Recloth'}

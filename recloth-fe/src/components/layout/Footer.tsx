@@ -5,10 +5,10 @@ import Link from 'next/link'
 export function Footer() {
   return (
     <footer className="bg-background border-t border-border mt-auto">
-      <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
-        <div className="flex  items-end flex-col md:flex-row justify-between gap-16">
+      <div className="flex flex flex-col items-center justify-center max-w-7xl mx-auto px-4 py-16 md:py-24">
+        <div className="flex items-center justify-center flex-col md:flex-row justify-between gap-16">
           {/* Brand */}
-          <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-center flex-col gap-6">
             <Link href="/" className="inline-block">
               <img src="/logo-recloth.png" alt="Recloth Logo" className="h-64 w-auto object-contain" />
             </Link>
@@ -18,7 +18,7 @@ export function Footer() {
           </div>
 
           {/* Links & Info */}
-          <div className="flex flex-wrap items-center gap-12 md:gap-24 flex-[2]">
+          <div className="flex flex-wrap justify-around items-start gap-12 md:gap-24 flex-[2]">
             <div className="space-y-6">
               <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">Katalog</h4>
               <ul className="space-y-3">
@@ -40,8 +40,7 @@ export function Footer() {
             <div className="space-y-6">
               <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">Hubungi</h4>
               <p className="text-[11px] text-zinc-500 leading-relaxed uppercase tracking-wider">
-                Jakarta, ID<br />
-                hello@recloth.id
+                Jakarta, ID hello@recloth.id
               </p>
             </div>
           </div>

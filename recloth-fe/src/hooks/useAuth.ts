@@ -85,6 +85,29 @@ export function useAuth() {
     },
   })
 
+  // Mutation: Forgot Password
+  const forgotPasswordMutation = useMutation({
+    mutationFn: (email: string) => authApi.forgotPassword(email),
+    onSuccess: (res) => {
+      toast.success(res.data.message || 'Token reset telah dikirim ke email Anda.')
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.message || 'Gagal memproses permintaan reset password.')
+    },
+  })
+
+  // Mutation: Reset Password
+  const resetPasswordMutation = useMutation({
+    mutationFn: (data: any) => authApi.resetPassword(data),
+    onSuccess: () => {
+      toast.success('Password berhasil diatur ulang! Silakan login.')
+      router.push('/login')
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.message || 'Gagal mengatur ulang password.')
+    },
+  })
+
   return {
     user: me.data,
     me,
@@ -93,6 +116,10 @@ export function useAuth() {
     logout: logoutMutation.mutate,
     updateProfile: updateProfileMutation.mutate,
     changePassword: changePasswordMutation.mutate,
-    isLoading: loginMutation.isPending || registerMutation.isPending || logoutMutation.isPending || updateProfileMutation.isPending || changePasswordMutation.isPending,
+    forgotPassword: forgotPasswordMutation.mutate,
+    resetPassword: resetPasswordMutation.mutate,
+    forgotPasswordStatus: forgotPasswordMutation,
+    resetPasswordStatus: resetPasswordMutation,
+    isLoading: loginMutation.isPending || registerMutation.isPending || logoutMutation.isPending || updateProfileMutation.isPending || changePasswordMutation.isPending || forgotPasswordMutation.isPending || resetPasswordMutation.isPending,
   }
 }
