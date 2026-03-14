@@ -58,7 +58,7 @@ export default function CartPage() {
             <div key={item.id} className="relative flex gap-6 p-6 bg-background group">
               <div className="relative h-32 w-24 bg-muted shrink-0 overflow-hidden">
                 <Image
-                  src={item.product.primary_photo || '/placeholder-product.png'}
+                  src={item.product.primary_photo_url || (item.product as any).primary_photo?.photo_url || (item.product.photos && item.product.photos.length > 0 ? item.product.photos[0].photo_url : '/placeholder-product.png')}
                   alt={item.product.name}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
