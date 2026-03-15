@@ -94,7 +94,7 @@ export default function SwapAjukanPage({ params }: { params: Promise<{ targetId:
               <Package className="h-8 w-8 text-zinc-300 mx-auto mb-3" />
               <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Kamu belum punya produk aktif</p>
               <button 
-                onClick={() => router.push('/seller/produk/tambah')}
+                onClick={() => router.push('/seller/produk/baru')}
                 className="mt-4 text-[10px] font-bold uppercase tracking-widest underline"
               >
                 Upload Produk Sekarang
