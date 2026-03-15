@@ -10,11 +10,11 @@ return new class extends Migration {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->enum('method', ['qris', 'va_bca', 'va_mandiri', 'va_bni', 'va_bri', 'gopay', 'ovo', 'dana', 'shopepay', 'card']);
+            $table->enum('method', ['qris', 'va_bca', 'va_mandiri', 'va_bni', 'va_bri', 'gopay', 'ovo', 'dana', 'shopepay', 'card', 'wallet']);
             $table->string('midtrans_order_id')->unique();
             $table->string('midtrans_transaction_id')->nullable()->index();
             $table->decimal('amount', 12, 2);
-            $table->enum('status', ['pending', 'paid', 'failed', 'refunded'])->default('pending');
+            $table->enum('status', ['pending', 'paid', 'success', 'failed', 'refunded'])->default('pending');
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
 

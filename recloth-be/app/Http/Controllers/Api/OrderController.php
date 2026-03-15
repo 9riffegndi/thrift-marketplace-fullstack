@@ -68,7 +68,7 @@ class OrderController extends Controller
                     'wallet_id' => $wallet->id,
                     'type' => 'payment',
                     'amount' => $total,
-                    'description' => "Pembayaran order #" . ($product->id), // Will be updated after order created
+                    'description' => "Pembayaran order #" . ($product->id),
                     'status' => 'done',
                 ]);
             }
@@ -86,14 +86,18 @@ class OrderController extends Controller
                 'total' => $total,
                 'courier_code' => $validated['courier_code'],
                 'courier_service' => $validated['courier_service'],
-                'escrow_status' => 'held',
+                'escrow_status' => $validated['payment_method'] === 'wallet' ? 'held' : 'waiting',
             ]);
 
-            // Update description with real order id if wallet
+            // If wallet, hold funds in escrow for seller
             if ($validated['payment_method'] === 'wallet') {
-                 $wallet->transactions()->latest()->first()->update([
-                     'description' => "Pembayaran order #{$order->id}"
-                 ]);
+                $this->escrowService->holdFunds($order);
+                
+                // Update wallet transaction description with real order id
+                $wallet->transactions()->latest()->first()->update([
+                    'order_id' => $order->id,
+                    'description' => "Pembayaran order #{$order->id}"
+                ]);
             }
 
             Payment::query()->create([

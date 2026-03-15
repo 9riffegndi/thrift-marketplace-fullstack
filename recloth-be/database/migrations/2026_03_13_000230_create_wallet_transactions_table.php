@@ -11,9 +11,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('wallet_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
-            $table->enum('type', ['escrow_in', 'escrow_release', 'refund', 'withdrawal', 'commission']);
+            $table->enum('type', ['escrow_in', 'escrow_release', 'refund', 'withdrawal', 'commission', 'payment', 'topup']);
             $table->decimal('amount', 14, 2);
             $table->string('description');
+            $table->enum('status', ['pending', 'done', 'failed'])->default('done');
             $table->timestamp('created_at')->useCurrent();
 
             $table->index(['wallet_id', 'type']);

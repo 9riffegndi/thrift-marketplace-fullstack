@@ -18,6 +18,7 @@ class WalletTransaction extends Model
         'type',
         'amount',
         'description',
+        'status',
         'created_at',
     ];
 
