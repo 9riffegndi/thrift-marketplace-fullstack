@@ -38,9 +38,18 @@ api.interceptors.response.use(
 
 // Typed helpers for cleaner calls
 export const get = <T>(url: string, params?: Record<string, unknown>) => api.get<ApiResponse<T>>(url, { params })
-export const post = <T>(url: string, data?: unknown) => api.post<ApiResponse<T>>(url, data)
-export const put = <T>(url: string, data?: unknown) => api.put<ApiResponse<T>>(url, data)
-export const patch = <T>(url: string, data?: unknown) => api.patch<ApiResponse<T>>(url, data)
+export const post = <T>(url: string, data?: unknown) => {
+  const isFormData = data instanceof FormData
+  return api.post<ApiResponse<T>>(url, data, isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {})
+}
+export const put = <T>(url: string, data?: unknown) => {
+  const isFormData = data instanceof FormData
+  return api.put<ApiResponse<T>>(url, data, isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {})
+}
+export const patch = <T>(url: string, data?: unknown) => {
+  const isFormData = data instanceof FormData
+  return api.patch<ApiResponse<T>>(url, data, isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {})
+}
 export const del = <T>(url: string) => api.delete<ApiResponse<T>>(url)
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────

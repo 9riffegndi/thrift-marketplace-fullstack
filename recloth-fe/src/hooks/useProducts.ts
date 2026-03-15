@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
-import { get, post, patch, del } from '@/lib/api'
+import { get, post, patch, del, productsApi } from '@/lib/api'
 import { toast } from 'sonner'
 import type { Product, PaginatedData, ApiResponse } from '@/types'
 
@@ -83,7 +83,7 @@ export const useSellerProducts = useMyProducts
 export function useCreateProduct() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: FormData) => post<Product>('/products', data),
+    mutationFn: (data: FormData) => productsApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['my-products'] })
