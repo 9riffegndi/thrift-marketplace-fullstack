@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('courier_code', 20)->nullable();
             $table->string('courier_service', 100)->nullable();
             $table->string('resi', 100)->nullable();
-            $table->enum('escrow_status', ['held', 'released', 'refunded'])->default('held');
+            $table->enum('escrow_status', ['waiting', 'held', 'released', 'refunded'])->default('waiting');
             $table->timestamps();
 
             $table->index(['buyer_id', 'status']);

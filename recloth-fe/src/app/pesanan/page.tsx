@@ -101,10 +101,11 @@ export default function OrdersPage() {
                   <div className="flex gap-4 sm:gap-6">
                     <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-none overflow-hidden bg-muted shrink-0">
                       <Image
-                        src={order.product?.primary_photo || '/placeholder-product.png'}
+                        src={order.product?.primary_photo_url || (order.product as any).primary_photo?.photo_url || (order.product?.photos && order.product.photos.length > 0 ? order.product.photos[0].photo_url : '/placeholder-product.png')}
                         alt={order.product?.name || 'Produk Pesanan'}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        unoptimized={order.product?.primary_photo_url?.startsWith('http') || (order.product as any).primary_photo?.photo_url?.startsWith('http')}
                       />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
