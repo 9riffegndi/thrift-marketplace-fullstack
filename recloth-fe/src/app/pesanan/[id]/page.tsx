@@ -94,11 +94,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         <div className="bg-card rounded-none border border-border/50 overflow-hidden shadow-sm">
           <div className="p-6 sm:p-8 flex flex-col sm:flex-row gap-8 items-start">
             <div className="relative h-40 w-40 sm:h-48 sm:w-48 rounded-none overflow-hidden bg-muted shrink-0 shadow-sm">
-              <Image
-                src={order.product?.primary_photo || '/placeholder-product.png'}
+               <Image
+                src={order.product?.primary_photo_url || (order.product as any).primary_photo?.photo_url || (order.product?.photos && order.product.photos.length > 0 ? order.product.photos[0].photo_url : '/placeholder-product.png')}
                 alt={order.product?.name || 'Produk Pesanan'}
                 fill
                 className="object-cover"
+                unoptimized={order.product?.primary_photo_url?.startsWith('http') || (order.product as any).primary_photo?.photo_url?.startsWith('http')}
               />
             </div>
             <div className="flex-1 flex flex-col min-w-0 py-2">
