@@ -1,73 +1,169 @@
-# Recloth: Premium C2C Marketplace & Swap Platform
+# 🧶 Recloth — Premium C2C Marketplace & Swap Platform
 
-Recloth is a high-performance, minimalist C2C marketplace designed for the premium thrifting community. Inspired by the clean aesthetics of H&M, it offers a seamless experience for buying, selling, and swapping (bartering) preloved fashion items.
-
-## 🚀 Tech Stack
-
-### Frontend
-- **Framework**: Next.js 15 (App Router)
-- **Styling**: Tailwind CSS 4 (Custom minimalist theme)
-- **State Management**: Zustand & React Query (@tanstack/react-query)
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-- **Form Handling**: React Hook Form & Zod
-- **API Client**: Axios with interceptors
-
-### Backend
-- **Framework**: Laravel 11
-- **Auth**: Laravel Sanctum (SPA & API)
-- **Real-time**: Laravel Reverb (Websockets)
-- **Admin CMS**: Filament v3 (Super Admin Panel)
-- **Database**: MySQL / MariaDB
-- **Search**: Laravel Scout (Database engine)
-- **Storage**: Amazon S3 (compatible local storage)
-- **Payment Gateway**: Midtrans Integration
-
-## ✨ Key Features
-
-### 🛍️ Premium Shopping Experience
-- **Responsive Grid**: 3-column layout (Desktop), 2-column (Tablet), 1-column (Mobile).
-- **Infinite Scroll**: Seamless "Load More" pagination for product discovery.
-- **Search & Filter**: Keyword search and category-based filtering.
-- **Product Detail**: Detailed condition badges, size info, and store linking.
-
-### 🔄 Unique Swap (Barter) System
-- **Request Flow**: Propose a swap for any product using your own items.
-- **Counter Offers**: Real-time negotiation for swaps.
-- **Escrow Guard**: Funds/items held securely until both parties confirm delivery.
-
-### 💬 Real-time Communication
-- **Messenger**: Instant chat between buyers and sellers.
-- **Status Indicators**: Read receipts, delivery status, and online presence.
-
-### 💳 Financial Ecosystem
-- **Wallet**: Check balance, view transaction history (Payment, Top-up, Withdrawal).
-- **Midtrans**: Checkout via QRIS, Virtual Accounts, and Bank Transfer.
-- **Admin CMS**: Manage users, products, categories, and withdrawals from a powerful backend.
-
-## 🛠️ Rapid Setup
-
-Initialize the entire stack with minimal effort:
-
-1. **Setup All**: Run `setup.bat` (Installs all FE/BE dependencies).
-2. **Launch Services**: Run `run-all.bat` (Starts Laravel, Reverb, and Next.js).
-3. **Database Reset**: Run `php artisan migrate:fresh --seed` (Creates fresh data with demo users).
-
-## 🔑 Demo Accounts
-
-Use these credentials to explore the platform (Password: `password`):
-
-- **Premium Account (Recommended)**: `penjual@recloth.id`
-  *Access to Seller Dashboard, Multi-item management, and standard buying features.*
-- **Buyer Account**: `pembeli@recloth.id`
-  *Standard browsing, checkout, and swap request experience.*
-- **Super Admin**: `admin@recloth.id`
-  *Access the control center at `http://localhost:8000/admin`.*
-
-## 📂 Project Structure
-- `/recloth-fe`: Modern Next.js application.
-- `/recloth-be`: RESTful Laravel API.
-- `api.yaml`: Full API contract and documentation.
+Recloth adalah platform marketplace C2C (Consumer-to-Consumer) khusus untuk komunitas premium thrifting. Sistem ini memadukan pengalaman belanja modern dengan fitur unik **Barter (Swap)**, didukung oleh sistem **Escrow** yang aman, chat real-time, dan dashboard seller yang komprehensif.
 
 ---
-Built with ❤️ for the Recloth Community.
+
+## 📋 Daftar Isi
+
+- [Fitur Utama](#-fitur-utama)
+- [Tech Stack](#-tech-stack)
+- [Arsitektur Sistem](#-arsitektur-arsitektur)
+- [Setup Cepat (Sekali Klik)](#-setup-cepat-sekali-klik)
+- [Setup Per Komponen](#-setup-per-komponen)
+- [Menjalankan Aplikasi](#-menjalankan-aplikasi)
+- [Akun Default](#-akun-default)
+- [Struktur Proyek](#-struktur-proyek)
+- [Alur Aplikasi](#-alur-aplikasi)
+
+---
+
+## ✨ Fitur Utama
+
+### Marketplace (Beli)
+- **Katalog Premium**: Grid 3-kolom responsif dengan infinite scroll (TanStack Query).
+- **Search & Filter**: Pencarian cepat berdasarkan kategori dan filter cerdas.
+- **Varian & Detail**: Informasi kondisi (Grade A-D), ukuran, dan berat yang akurat.
+- **Cart & Checkout**: Manajemen keranjang per item dengan kalkulasi ongkir real-time.
+
+### Swap (Barter)
+- **Ajukan Swap**: Tukarkan barangmu dengan barang user lain.
+- **Sistem Negosiasi**: Real-time request dan manajemen tawaran barter.
+- **Escrow Guard**: Dana atau barang ditahan sistem sampai kedua pihak konfirmasi terima.
+
+### Seller Dashboard
+- **Manajemen Inventori**: Upload produk mudah dengan multiple photo upload.
+- **Stats Penjualan**: Grafik pendapatan dan statistik performa toko.
+- **Manajemen Pesanan**: Proses pesanan, input resi, dan kelola penarikan dana.
+
+### Wallet & Payment
+- **Wallet System**: Saldo in-app untuk belanja instan dan withdraw ke rekening.
+- **Midtrans Integration**: Support payment gateway (QRIS, VA, Bank Transfer).
+- **History Transaksi**: Log detail untuk top-up, pembayaran, dan penarikan.
+
+### Real-time Communication
+- **Real-time Messenger**: Chat instan antar pengguna dengan Laravel Reverb.
+- **Status Indicator**: Indikator sedang mengetik, terkirim, dan telah dibaca.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Teknologi |
+|---|---|
+| **Backend** | Laravel 12, PHP 8.2+ |
+| **Admin Panel** | Filament 5.3 |
+| **Frontend** | Next.js 16 (App Router), React 19 |
+| **Styling** | Tailwind CSS 4 |
+| **State** | Zustand 5, TanStack React Query 5 |
+| **WebSocket** | Laravel Reverb |
+| **Auth** | Laravel Sanctum (Bearer Token) |
+| **Payment** | Midtrans (Core API) |
+| **Database** | MySQL / MariaDB |
+| **Role/Permission** | Spatie Laravel Permission |
+
+---
+
+## 🏗 Arsitektur Sistem
+
+```mermaid
+graph TD
+    Client[Browser / Mobile] --> FE[Next.js 16 Frontend]
+    FE --> BE[Laravel 12 API]
+    BE --> DB[(MySQL Database)]
+    BE --> WS[Laravel Reverb Websockets]
+    WS -.-> FE
+    BE --> Midtrans[Midtrans Gateway]
+    Midtrans -.-> BE
+    BE --> Admin[Filament Admin Panel]
+```
+
+---
+
+## 🚀 Setup Cepat (Sekali Klik)
+
+### Prasyarat
+- **PHP** >= 8.2 & **Composer**
+- **Node.js** >= 18.x & **npm**
+- **MySQL** / **MariaDB**
+
+### Windows (Setup & Jalankan)
+
+Dari root folder proyek:
+
+```powershell
+# 1. Setup dependensi (BE & FE)
+.\setup.bat
+
+# 2. Jalankan semua service sekaligus
+.\run-all.bat
+```
+
+### Script Init Khusus Backend
+Jika ingin reset database dan data demo:
+```bash
+cd recloth-be
+php artisan migrate:fresh --seed
+```
+
+---
+
+## 👤 Akun Default
+
+Gunakan kredensial berikut untuk mengeksplorasi platform (Password: `password`):
+
+| Role | Email | Akses Utama |
+|---|---|---|
+| **Super Admin** | `admin@recloth.id` | Filament CMS (`/admin`) |
+| **Seller** | `penjual@recloth.id` | Dashboard Toko & Katalog |
+| **Buyer** | `pembeli@recloth.id` | Katalog & Swap Flow |
+
+---
+
+## 📁 Struktur Proyek
+
+```
+recloth/
+├── recloth-be/                  # Backend API (Laravel 12)
+│   ├── app/
+│   │   ├── Http/Controllers/    # API Logics (Order, Product, Swap, etc.)
+│   │   ├── Models/              # Database Models
+│   │   └── Services/            # Business Logic (Escrow Service)
+│   ├── database/                # Reality-based Indonesia Seeders
+│   └── routes/                  # API & Broadcast Routes
+│
+├── recloth-fe/                  # Frontend App (Next.js 16)
+│   ├── src/
+│   │   ├── app/                 # App Router (Pages & Layouts)
+│   │   ├── components/          # Reusable UI Components
+│   │   ├── hooks/               # Custom Logic Hooks
+│   │   └── lib/                 # API Client & Utilities
+│
+├── api.yaml                     # 📄 OpenAPI 3.0 Specification
+├── setup.bat                    # ⚡ Automation: Install All Dependencies
+└── run-all.bat                  # ▶ Automation: Start BE, FE, & Reverb
+```
+
+---
+
+## 🔄 Alur Utama Aplikasi
+
+### Alur Beli (Marketplace)
+1. Buyer mencari produk melalui katalog.
+2. Tambahkan ke keranjang dan pilih kurir.
+3. Checkout dan bayar (Midtrans/Wallet).
+4. Penjual proses pesanan & input resi.
+5. Dana ditahan sistem (**Escrow**) sampai barang diterima buyer.
+
+### Alur Barter (Swap)
+1. Buyer mengajukan permintaan swap untuk produk target.
+2. Buyer memilih produk miliknya sendiri sebagai penukar.
+3. Penjual menerima/menolak ajuan swap.
+4. Jika diterima, kedua pihak mengirim barang.
+5. Sistem memastikan transaksi adil sebelum status selesai.
+
+---
+
+## 📄 Lisensi
+
+MIT License — Dikembangkan dengan ❤️ untuk Komunitas Thrifting.
