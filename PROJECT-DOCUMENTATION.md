@@ -1,7 +1,7 @@
 # 👔 Recloth Project Documentation
 
 ## Project Overview
-Recloth is a specialized C2C Marketplace and Swapping platform for high-end second-hand fashion. Inspired by minimalist design systems, it provides a premium experience for users to buy, sell, or barter their clothing items.
+Recloth is a specialized C2C Marketplace and Swapping platform for high-end second-hand fashion. Inspired by minimalist design systems, it provides a premium experience for users to buy, sell, or barter their clothing items
 
 ## Table of Contents
 1. [Core Modules](#core-modules)
