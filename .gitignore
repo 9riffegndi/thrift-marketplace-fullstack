@@ -37,20 +37,6 @@ recloth-fe/.next/
 recloth-fe/out/
 recloth-fe/build/
 
-# Credentials & Sensitive
-auth.json
-*.p12
-*.pem
-*.key
-credentials.json
-.gemini/
-.agents/
-.agent/
-_agents/
-_agent/
-brain/
-mcp/
-config/mcp*
 
 #  Metadata
 *.webp
